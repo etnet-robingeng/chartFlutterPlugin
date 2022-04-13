@@ -16,7 +16,6 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   MainState state;
   bool isLine;
 
-  //绘制的内容区域
   late Rect _contentRect;
   double _contentPadding = 5.0;
   List<int> maDayList;
@@ -41,12 +40,12 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       this.verticalTextAlignment,
       [this.maDayList = const [5, 10, 20]])
       : super(
-            chartRect: mainRect,
-            maxValue: maxValue,
-            minValue: minValue,
-            topPadding: topPadding,
-            fixedLength: fixedLength,
-            gridColor: chartColors.gridColor) {
+      chartRect: mainRect,
+      maxValue: maxValue,
+      minValue: minValue,
+      topPadding: topPadding,
+      fixedLength: fixedLength,
+      gridColor: chartColors.gridColor) {
     mCandleWidth = this.chartStyle.candleWidth;
     mCandleLineWidth = this.chartStyle.candleLineWidth;
     mLinePaint = Paint()
@@ -132,7 +131,6 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     ..style = PaintingStyle.fill
     ..isAntiAlias = true;
 
-  //画折线图
   drawPolyline(double lastPrice, double curPrice, Canvas canvas, double lastX,
       double curX) {
 //    drawLine(lastPrice + 100, curPrice + 100, canvas, lastX, curX, ChartColors.kLineColor);
@@ -145,12 +143,11 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
 //      mLinePath.cubicTo(
 //          (lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2, getY(curPrice), curX, getY(curPrice));
 //    }
-    if (lastX == curX) lastX = 0; //起点位置填充
+    if (lastX == curX) lastX = 0;
     mLinePath!.moveTo(lastX, getY(lastPrice));
     mLinePath!.cubicTo((lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2,
         getY(curPrice), curX, getY(curPrice));
 
-    //画阴影
     mLineFillShader ??= LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -214,7 +211,6 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     double r = mCandleWidth / 2;
     double lineR = mCandleLineWidth / 2;
     if (open >= close) {
-      // 实体高度>= CandleLineWidth
       if (open - close < mCandleLineWidth) {
         open = close + mCandleLineWidth;
       }
@@ -224,7 +220,6 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       canvas.drawRect(
           Rect.fromLTRB(curX - lineR, high, curX + lineR, low), chartPaint);
     } else if (close > open) {
-      // 实体高度>= CandleLineWidth
       if (close - open < mCandleLineWidth) {
         open = close - mCandleLineWidth;
       }
@@ -243,7 +238,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       double value = (gridRows - i) * rowSpace / scaleY + minValue;
       TextSpan span = TextSpan(text: "${format(value)}", style: textStyle);
       TextPainter tp =
-          TextPainter(text: span, textDirection: TextDirection.ltr);
+      TextPainter(text: span, textDirection: TextDirection.ltr);
       tp.layout();
 
       double offsetX;

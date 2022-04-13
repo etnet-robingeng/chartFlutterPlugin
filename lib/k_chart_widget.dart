@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/extension/map_ext.dart';
-import 'package:k_chart/flutter_k_chart.dart';
+import 'package:k_chart/renderer/chart_painter.dart';
+import 'package:k_chart/renderer/main_renderer.dart';
+import 'package:k_chart/utils/date_format_util.dart';
+import 'chart_style.dart';
+import 'chart_translations.dart';
+import 'entity/info_window_entity.dart';
+import 'entity/k_line_entity.dart';
 
 enum MainState { MA, BOLL, NONE }
 enum SecondaryState { MACD, KDJ, RSI, WR, CCI, NONE }
@@ -25,22 +30,20 @@ class TimeFormat {
 
 class KChartWidget extends StatefulWidget {
   final List<KLineEntity>? datas;
-  final MainState mainState;
+  final MainState? mainState;
   final bool volHidden;
-  final SecondaryState secondaryState;
+  final SecondaryState? secondaryState;
   final Function()? onSecondaryTap;
   final bool isLine;
-  final bool isTapShowInfoDialog; //是否开启单击显示详情数据
+  final bool isTapShowInfoDialog;
   final bool hideGrid;
-  @Deprecated('Use `translations` instead.')
   final bool isChinese;
   final bool showNowPrice;
   final bool showInfoDialog;
-  final bool materialInfoDialog; // Material风格的信息弹窗
+  final bool materialInfoDialog;
   final Map<String, ChartTranslations> translations;
   final List<String> timeFormat;
 
-  //当屏幕滚动到尽头会调用，真为拉到屏幕右侧尽头，假为拉到屏幕左侧尽头
   final Function(bool)? onLoadMore;
 
   final int fixedLength;
@@ -53,34 +56,32 @@ class KChartWidget extends StatefulWidget {
   final ChartStyle chartStyle;
   final VerticalTextAlignment verticalTextAlignment;
   final bool isTrendLine;
+  final ThemeMode nowThemeMode;
 
-  KChartWidget(
-    this.datas,
-    this.chartStyle,
-    this.chartColors, {
-    required this.isTrendLine,
-    this.mainState = MainState.MA,
-    this.secondaryState = SecondaryState.MACD,
-    this.onSecondaryTap,
-    this.volHidden = false,
-    this.isLine = false,
-    this.isTapShowInfoDialog = false,
-    this.hideGrid = false,
-    @Deprecated('Use `translations` instead.') this.isChinese = false,
-    this.showNowPrice = true,
-    this.showInfoDialog = true,
-    this.materialInfoDialog = true,
-    this.translations = kChartTranslations,
-    this.timeFormat = TimeFormat.YEAR_MONTH_DAY,
-    this.onLoadMore,
-    this.fixedLength = 2,
-    this.maDayList = const [5, 10, 20],
-    this.flingTime = 600,
-    this.flingRatio = 0.5,
-    this.flingCurve = Curves.decelerate,
-    this.isOnDrag,
-    this.verticalTextAlignment = VerticalTextAlignment.left,
-  });
+  KChartWidget(this.datas, this.chartStyle, this.chartColors,
+      {required this.isTrendLine,
+        this.mainState = MainState.MA,
+        this.secondaryState = SecondaryState.MACD,
+        this.onSecondaryTap,
+        this.volHidden = false,
+        this.isLine = false,
+        this.isTapShowInfoDialog = false,
+        this.hideGrid = false,
+        this.isChinese = false,
+        this.showNowPrice = true,
+        this.showInfoDialog = true,
+        this.materialInfoDialog = true,
+        this.translations = kChartTranslations,
+        this.timeFormat = TimeFormat.YEAR_MONTH_DAY,
+        this.onLoadMore,
+        this.fixedLength = 2,
+        this.maDayList = const [5, 10, 20],
+        this.flingTime = 600,
+        this.flingRatio = 0.5,
+        this.flingCurve = Curves.decelerate,
+        this.isOnDrag,
+        this.verticalTextAlignment = VerticalTextAlignment.left,
+        this.nowThemeMode = ThemeMode.dark});
 
   @override
   _KChartWidgetState createState() => _KChartWidgetState();
@@ -134,30 +135,33 @@ class _KChartWidgetState extends State<KChartWidget>
       mScaleX = 1.0;
     }
     final _painter = ChartPainter(
-      widget.chartStyle,
-      widget.chartColors,
-      lines: lines, //For TrendLine
-      isTrendLine: widget.isTrendLine, //For TrendLine
-      selectY: mSelectY, //For TrendLine
-      datas: widget.datas,
-      scaleX: mScaleX,
-      scrollX: mScrollX,
-      selectX: mSelectX,
-      isLongPass: isLongPress,
-      isOnTap: isOnTap,
-      isTapShowInfoDialog: widget.isTapShowInfoDialog,
-      mainState: widget.mainState,
-      volHidden: widget.volHidden,
-      secondaryState: widget.secondaryState,
-      isLine: widget.isLine,
-      hideGrid: widget.hideGrid,
-      showNowPrice: widget.showNowPrice,
-      sink: mInfoWindowStream?.sink,
-      fixedLength: widget.fixedLength,
-      maDayList: widget.maDayList,
-      verticalTextAlignment: widget.verticalTextAlignment,
+        widget.chartStyle,
+        widget.chartColors,
+        lines: lines,
+        //For TrendLine
+        isTrendLine: widget.isTrendLine,
+        //For TrendLine
+        selectY: mSelectY,
+        //For TrendLine
+        datas: widget.datas,
+        scaleX: mScaleX,
+        scrollX: mScrollX,
+        selectX: mSelectX,
+        isLongPass: isLongPress,
+        isOnTap: isOnTap,
+        isTapShowInfoDialog: widget.isTapShowInfoDialog,
+        mainState: widget.mainState,
+        volHidden: widget.volHidden,
+        secondaryState: widget.secondaryState,
+        isLine: widget.isLine,
+        hideGrid: widget.hideGrid,
+        showNowPrice: widget.showNowPrice,
+        sink: mInfoWindowStream?.sink,
+        fixedLength: widget.fixedLength,
+        maDayList: widget.maDayList,
+        verticalTextAlignment: widget.verticalTextAlignment,
+        nowThemeMode: widget.nowThemeMode
     );
-
     return LayoutBuilder(
       builder: (context, constraints) {
         mHeight = constraints.maxHeight;
@@ -184,7 +188,8 @@ class _KChartWidgetState extends State<KChartWidget>
               enableCordRecord = false;
               Offset p1 = Offset(getTrendLineX(), mSelectY);
               if (!waitingForOtherPairofCords)
-                lines.add(TrendLine(p1, Offset(-1, -1), trendLineMax!, trendLineScale!));
+                lines.add(TrendLine(
+                    p1, Offset(-1, -1), trendLineMax!, trendLineScale!));
 
               if (waitingForOtherPairofCords) {
                 var a = lines.last;
@@ -230,7 +235,7 @@ class _KChartWidgetState extends State<KChartWidget>
             isOnTap = false;
             isLongPress = true;
             if ((mSelectX != details.globalPosition.dx ||
-                    mSelectY != details.globalPosition.dy) &&
+                mSelectY != details.globalPosition.dy) &&
                 !widget.isTrendLine) {
               mSelectX = details.globalPosition.dx;
               notifyChanged();
@@ -250,7 +255,7 @@ class _KChartWidgetState extends State<KChartWidget>
           },
           onLongPressMoveUpdate: (details) {
             if ((mSelectX != details.globalPosition.dx ||
-                    mSelectY != details.globalPosition.dy) &&
+                mSelectY != details.globalPosition.dy) &&
                 !widget.isTrendLine) {
               mSelectX = details.globalPosition.dx;
               mSelectY = details.localPosition.dy;
@@ -309,7 +314,7 @@ class _KChartWidgetState extends State<KChartWidget>
     aniX = null;
     aniX = Tween<double>(begin: mScrollX, end: x * widget.flingRatio + mScrollX)
         .animate(CurvedAnimation(
-            parent: _controller!.view, curve: widget.flingCurve));
+        parent: _controller!.view, curve: widget.flingCurve));
     aniX!.addListener(() {
       mScrollX = aniX!.value;
       if (mScrollX <= 0) {
@@ -350,8 +355,8 @@ class _KChartWidgetState extends State<KChartWidget>
               !snapshot.hasData ||
               snapshot.data?.kLineEntity == null) return Container();
           KLineEntity entity = snapshot.data!.kLineEntity;
-          double upDown = entity.change ?? entity.close - entity.open;
-          double upDownPercent = entity.ratio ?? (upDown / entity.open) * 100;
+          // double upDown = entity.change ?? entity.close - entity.open;
+          // double upDownPercent = entity.ratio ?? (upDown / entity.open) * 100;
           final double? entityAmount = entity.amount;
           infos = [
             getDate(entity.time),
@@ -359,8 +364,8 @@ class _KChartWidgetState extends State<KChartWidget>
             entity.high.toStringAsFixed(widget.fixedLength),
             entity.low.toStringAsFixed(widget.fixedLength),
             entity.close.toStringAsFixed(widget.fixedLength),
-            "${upDown > 0 ? "+" : ""}${upDown.toStringAsFixed(widget.fixedLength)}",
-            "${upDownPercent > 0 ? "+" : ''}${upDownPercent.toStringAsFixed(2)}%",
+            // "${upDown > 0 ? "+" : ""}${upDown.toStringAsFixed(widget.fixedLength)}",
+            // "${upDownPercent > 0 ? "+" : ''}${upDownPercent.toStringAsFixed(2)}%",
             if (entityAmount != null) entityAmount.toInt().toString()
           ];
           final dialogPadding = 4.0;

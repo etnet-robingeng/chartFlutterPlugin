@@ -7,16 +7,16 @@ class KLineEntity extends KEntity {
   late double close;
   late double vol;
   late double? amount;
-  double? change;
-  double? ratio;
+  // double? change;
+  // double? ratio;
   int? time;
 
   KLineEntity.fromCustom({
     this.amount,
     required this.open,
     required this.close,
-    this.change,
-    this.ratio,
+    // this.change,
+    // this.ratio,
     required this.time,
     required this.high,
     required this.low,
@@ -28,17 +28,11 @@ class KLineEntity extends KEntity {
     high = json['high']?.toDouble() ?? 0;
     low = json['low']?.toDouble() ?? 0;
     close = json['close']?.toDouble() ?? 0;
-    vol = json['vol']?.toDouble() ?? 0;
-    amount = json['amount']?.toDouble();
-    int? tempTime = json['time']?.toInt();
-    //兼容火币数据
-    if (tempTime == null) {
-      tempTime = json['id']?.toInt() ?? 0;
-      tempTime = tempTime! * 1000;
-    }
-    time = tempTime;
-    ratio = json['ratio']?.toDouble();
-    change = json['change']?.toDouble();
+    vol = json['volume']?.toDouble() ?? 0;
+    amount = json['volume']?.toDouble();
+    time = json['timestamp']?.toInt();
+    // ratio = json['ratio']?.toDouble();
+    // change = json['change']?.toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -50,13 +44,13 @@ class KLineEntity extends KEntity {
     data['low'] = this.low;
     data['vol'] = this.vol;
     data['amount'] = this.amount;
-    data['ratio'] = this.ratio;
-    data['change'] = this.change;
+    // data['ratio'] = this.ratio;
+    // data['change'] = this.change;
     return data;
   }
 
   @override
   String toString() {
-    return 'MarketModel{open: $open, high: $high, low: $low, close: $close, vol: $vol, time: $time, amount: $amount, ratio: $ratio, change: $change}';
+    return '{"open": $open, "high": $high, "low": $low, "close": $close, "vol": $vol, "time": $time, "amount": $amount}';
   }
 }

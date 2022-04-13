@@ -45,13 +45,13 @@ class ChartTranslations {
 
 const kChartTranslations = {
   'zh_CN': ChartTranslations(
-    date: '时间',
-    open: '开',
+    date: '時間',
+    open: '開',
     high: '高',
     low: '低',
     close: '收',
-    changeAmount: '涨跌额',
-    change: '涨跌幅',
-    amount: '成交额',
+    changeAmount: '漲跌額',
+    change: '漲跌幅',
+    amount: '成交額',
   ),
 };
