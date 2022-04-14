@@ -1,6 +1,6 @@
 library flutter_k_chart;
 
-export 'k_chart_widget.dart'; //  ui
+export 'chartPageWidget.dart'; //  ui
 export 'chart_style.dart';
 export 'depth_chart.dart';
 

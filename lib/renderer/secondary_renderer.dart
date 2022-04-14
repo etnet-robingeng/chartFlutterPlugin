@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../unit/macd_unit.dart';
-import '../k_chart_widget.dart' show SecondaryState;
+import '../chartPageWidget.dart' show SecondaryState;
 import 'base_chart_renderer.dart';
 
 class SecondaryRenderer extends BaseChartRenderer<MACDUnit> {

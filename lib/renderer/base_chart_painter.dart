@@ -5,7 +5,7 @@ import 'package:flutter/material.dart'
 
 import '../chart_style.dart' show ChartStyle;
 import '../unit/k_line_unit.dart';
-import '../k_chart_widget.dart';
+import '../chartPageWidget.dart';
 import '../utils/date_format_util.dart';
 
 export 'package:flutter/material.dart'
