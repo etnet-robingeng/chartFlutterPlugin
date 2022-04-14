@@ -4,7 +4,7 @@ import 'package:flutter/material.dart'
     show Color, TextStyle, Rect, Canvas, Size, CustomPainter;
 
 import '../chart_style.dart' show ChartStyle;
-import '../entity/k_line_entity.dart';
+import '../unit/k_line_unit.dart';
 import '../k_chart_widget.dart';
 import '../utils/date_format_util.dart';
 
@@ -13,7 +13,7 @@ export 'package:flutter/material.dart'
 
 abstract class BaseChartPainter extends CustomPainter {
   static double maxScrollX = 0.0;
-  List<KLineEntity>? datas;
+  List<KLineUnit>? datas;
   MainState mainState;
 
   SecondaryState secondaryState;
@@ -139,7 +139,7 @@ abstract class BaseChartPainter extends CustomPainter {
 
   void drawDate(Canvas canvas, Size size);
 
-  void drawText(Canvas canvas, KLineEntity data, double x);
+  void drawText(Canvas canvas, KLineUnit data, double x);
 
   void drawMaxAndMin(Canvas canvas);
 
@@ -190,7 +190,7 @@ abstract class BaseChartPainter extends CustomPainter {
     }
   }
 
-  void getMainMaxMinValue(KLineEntity item, int i) {
+  void getMainMaxMinValue(KLineUnit item, int i) {
     double maxPrice, minPrice;
     if (mainState == MainState.MA) {
       maxPrice = max(item.high, _findMaxMA(item.maValueList ?? [0]));
@@ -236,14 +236,14 @@ abstract class BaseChartPainter extends CustomPainter {
     return result;
   }
 
-  void getVolMaxMinValue(KLineEntity item) {
+  void getVolMaxMinValue(KLineUnit item) {
     mVolMaxValue = max(mVolMaxValue,
-        max(item.vol, max(item.MA5Volume ?? 0, item.MA10Volume ?? 0)));
+        max(item.vol, max(item.MA5_Volume ?? 0, item.MA10_Volume ?? 0)));
     mVolMinValue = min(mVolMinValue,
-        min(item.vol, min(item.MA5Volume ?? 0, item.MA10Volume ?? 0)));
+        min(item.vol, min(item.MA5_Volume ?? 0, item.MA10_Volume ?? 0)));
   }
 
-  void getSecondaryMaxMinValue(KLineEntity item) {
+  void getSecondaryMaxMinValue(KLineUnit item) {
     if (secondaryState == SecondaryState.MACD) {
       if (item.macd != null) {
         mSecondaryMaxValue =
@@ -306,7 +306,7 @@ abstract class BaseChartPainter extends CustomPainter {
 
   double getX(int position) => position * mPointWidth + mPointWidth / 2;
 
-  KLineEntity getItem(int position) {
+  KLineUnit getItem(int position) {
     return datas![position];
     // if (datas != null) {
     //   return datas[position];

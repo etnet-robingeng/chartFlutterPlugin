@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<KLineEntity>? datas;
+  List<KLineUnit>? datas;
   bool showLoading = true;
   MainState _mainState = MainState.MA;
   bool _volHidden = false;
@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isChinese = true;
   bool _hideGrid = false;
   bool _showNowPrice = true;
-  List<DepthEntity>? _bids, _asks;
+  List<DepthUnit>? _bids, _asks;
   bool isChangeUI = false;
   bool _isTrendLine = false;
 
@@ -56,25 +56,24 @@ class _MyHomePageState extends State<MyHomePage> {
     rootBundle.loadString('assets/depth.json').then((result) {
       final parseJson = json.decode(result);
       final tick = parseJson['tick'] as Map<String, dynamic>;
-      final List<DepthEntity> bids = (tick['bids'] as List<dynamic>)
-          .map<DepthEntity>(
-              (item) => DepthEntity(item[0] as double, item[1] as double))
+      final List<DepthUnit> bids = (tick['bids'] as List<dynamic>)
+          .map<DepthUnit>(
+              (item) => DepthUnit(item[0] as double, item[1] as double))
           .toList();
-      final List<DepthEntity> asks = (tick['asks'] as List<dynamic>)
-          .map<DepthEntity>(
-              (item) => DepthEntity(item[0] as double, item[1] as double))
+      final List<DepthUnit> asks = (tick['asks'] as List<dynamic>)
+          .map<DepthUnit>(
+              (item) => DepthUnit(item[0] as double, item[1] as double))
           .toList();
       initDepth(bids, asks);
     });
   }
 
-  void initDepth(List<DepthEntity>? bids, List<DepthEntity>? asks) {
+  void initDepth(List<DepthUnit>? bids, List<DepthUnit>? asks) {
     if (bids == null || asks == null || bids.isEmpty || asks.isEmpty) return;
     _bids = [];
     _asks = [];
     double amount = 0.0;
     bids.sort((left, right) => left.price.compareTo(right.price));
-    //累加买入委托量
     bids.reversed.forEach((item) {
       amount += item.vol;
       item.vol = amount;
@@ -83,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     amount = 0.0;
     asks.sort((left, right) => left.price.compareTo(right.price));
-    //累加卖出委托量
     asks.forEach((item) {
       amount += item.vol;
       item.vol = amount;
@@ -213,9 +211,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getData(String period) {
-    /*
-     * 可以翻墙使用方法1加载数据，不可以翻墙使用方法2加载数据，默认使用方法1加载最新数据
-     */
     final Future<String> future = getChatDataFromInternet(period);
     // final Future<String> future = getChatDataFromJson();
     future.then((String result) {
@@ -227,7 +222,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  //获取火币数据，需要翻墙
   Future<String> getChatDataFromInternet(String? period) async {
     var url =
         'https://api.huobi.br.com/market/history/kline?period=${period ?? '1day'}&size=300&symbol=btcusdt';
@@ -242,7 +236,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return result;
   }
 
-  // 如果你不能翻墙，可以使用这个方法加载数据
   Future<String> getChatDataFromJson() async {
     return rootBundle.loadString('assets/chatData.json');
   }
@@ -251,11 +244,11 @@ class _MyHomePageState extends State<MyHomePage> {
     final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
     final list = parseJson['data'] as List<dynamic>;
     datas = list
-        .map((item) => KLineEntity.fromJson(item as Map<String, dynamic>))
+        .map((item) => KLineUnit.fromJson(item as Map<String, dynamic>))
         .toList()
         .reversed
         .toList()
-        .cast<KLineEntity>();
+        .cast<KLineUnit>();
     DataUtil.calculate(datas!);
     showLoading = false;
     setState(() {});

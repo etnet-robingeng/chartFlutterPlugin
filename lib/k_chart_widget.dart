@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:k_chart/extension/map_ext.dart';
+import 'package:k_chart/extension/map_extension.dart';
 import 'package:k_chart/renderer/chart_painter.dart';
 import 'package:k_chart/renderer/main_renderer.dart';
 import 'package:k_chart/utils/date_format_util.dart';
 import 'chart_style.dart';
 import 'chart_translations.dart';
-import 'entity/info_window_entity.dart';
-import 'entity/k_line_entity.dart';
+import 'unit/detail_window.dart';
+import 'unit/k_line_unit.dart';
 
 enum MainState { MA, BOLL, NONE }
 enum SecondaryState { MACD, KDJ, RSI, WR, CCI, NONE }
@@ -29,7 +29,7 @@ class TimeFormat {
 }
 
 class KChartWidget extends StatefulWidget {
-  final List<KLineEntity>? datas;
+  final List<KLineUnit>? datas;
   final MainState? mainState;
   final bool volHidden;
   final SecondaryState? secondaryState;
@@ -90,7 +90,7 @@ class KChartWidget extends StatefulWidget {
 class _KChartWidgetState extends State<KChartWidget>
     with TickerProviderStateMixin {
   double mScaleX = 1.0, mScrollX = 0.0, mSelectX = 0.0;
-  StreamController<InfoWindowEntity?>? mInfoWindowStream;
+  StreamController<DetailWindow?>? mInfoWindowStream;
   double mHeight = 0, mWidth = 0;
   AnimationController? _controller;
   Animation<double>? aniX;
@@ -113,7 +113,7 @@ class _KChartWidgetState extends State<KChartWidget>
   @override
   void initState() {
     super.initState();
-    mInfoWindowStream = StreamController<InfoWindowEntity?>();
+    mInfoWindowStream = StreamController<DetailWindow?>();
   }
 
   @override
@@ -347,14 +347,14 @@ class _KChartWidgetState extends State<KChartWidget>
   late List<String> infos;
 
   Widget _buildInfoDialog() {
-    return StreamBuilder<InfoWindowEntity?>(
+    return StreamBuilder<DetailWindow?>(
         stream: mInfoWindowStream?.stream,
         builder: (context, snapshot) {
           if ((!isLongPress && !isOnTap) ||
               widget.isLine == true ||
               !snapshot.hasData ||
               snapshot.data?.kLineEntity == null) return Container();
-          KLineEntity entity = snapshot.data!.kLineEntity;
+          KLineUnit entity = snapshot.data!.kLineEntity;
           // double upDown = entity.change ?? entity.close - entity.open;
           // double upDownPercent = entity.ratio ?? (upDown / entity.open) * 100;
           final double? entityAmount = entity.amount;

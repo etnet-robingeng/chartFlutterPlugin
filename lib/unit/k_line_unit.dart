@@ -1,21 +1,21 @@
-import '../entity/k_entity.dart';
+import '../unit/k_unit.dart';
 
-class KLineEntity extends KEntity {
+class KLineUnit extends KUnit {
   late double open;
   late double high;
   late double low;
   late double close;
   late double vol;
   late double? amount;
-  // double? change;
+  // double? perChange;
   // double? ratio;
   int? time;
 
-  KLineEntity.fromCustom({
+  KLineUnit.fromCustom({
     this.amount,
     required this.open,
     required this.close,
-    // this.change,
+    // this.perChange,
     // this.ratio,
     required this.time,
     required this.high,
@@ -23,7 +23,7 @@ class KLineEntity extends KEntity {
     required this.vol,
   });
 
-  KLineEntity.fromJson(Map<String, dynamic> json) {
+  KLineUnit.fromJson(Map<String, dynamic> json) {
     open = json['open']?.toDouble() ?? 0;
     high = json['high']?.toDouble() ?? 0;
     low = json['low']?.toDouble() ?? 0;
@@ -32,7 +32,7 @@ class KLineEntity extends KEntity {
     amount = json['volume']?.toDouble();
     time = json['timestamp']?.toInt();
     // ratio = json['ratio']?.toDouble();
-    // change = json['change']?.toDouble();
+    // perChange = json['perChange']?.toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -45,7 +45,7 @@ class KLineEntity extends KEntity {
     data['vol'] = this.vol;
     data['amount'] = this.amount;
     // data['ratio'] = this.ratio;
-    // data['change'] = this.change;
+    // data['perChange'] = this.perChange;
     return data;
   }
 

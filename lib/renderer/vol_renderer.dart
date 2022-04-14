@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 
-import '../entity/volume_entity.dart';
+import '../unit/volume_unit.dart';
 import '../utils/number_util.dart';
 import 'base_chart_renderer.dart';
 
@@ -39,13 +39,13 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
                 : this.chartColors.dnColor);
     }
 
-    if (lastPoint.MA5Volume != 0) {
-      drawLine(lastPoint.MA5Volume, curPoint.MA5Volume, canvas, lastX, curX,
+    if (lastPoint.MA5_Volume != 0) {
+      drawLine(lastPoint.MA5_Volume, curPoint.MA5_Volume, canvas, lastX, curX,
           this.chartColors.ma5Color);
     }
 
-    if (lastPoint.MA10Volume != 0) {
-      drawLine(lastPoint.MA10Volume, curPoint.MA10Volume, canvas, lastX, curX,
+    if (lastPoint.MA10_Volume != 0) {
+      drawLine(lastPoint.MA10_Volume, curPoint.MA10_Volume, canvas, lastX, curX,
           this.chartColors.ma10Color);
     }
   }
@@ -60,13 +60,13 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
         TextSpan(
             text: "VOL:${NumberUtil.format(data.vol)}    ",
             style: getTextStyle(this.chartColors.volColor)),
-        if (data.MA5Volume.notNullOrZero)
+        if (data.MA5_Volume.notNullOrZero)
           TextSpan(
-              text: "MA5:${NumberUtil.format(data.MA5Volume!)}    ",
+              text: "MA5:${NumberUtil.format(data.MA5_Volume!)}    ",
               style: getTextStyle(this.chartColors.ma5Color)),
-        if (data.MA10Volume.notNullOrZero)
+        if (data.MA10_Volume.notNullOrZero)
           TextSpan(
-              text: "MA10:${NumberUtil.format(data.MA10Volume!)}    ",
+              text: "MA10:${NumberUtil.format(data.MA10_Volume!)}    ",
               style: getTextStyle(this.chartColors.ma10Color)),
       ],
     );

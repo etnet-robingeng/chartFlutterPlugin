@@ -2,8 +2,8 @@ import 'dart:async' show StreamSink;
 
 import 'package:flutter/material.dart';
 
-import '../entity/info_window_entity.dart';
-import '../entity/k_line_entity.dart';
+import '../unit/detail_window.dart';
+import '../unit/k_line_unit.dart';
 import '../utils/date_format_util.dart';
 import '../utils/number_util.dart';
 import 'base_chart_painter.dart';
@@ -35,7 +35,7 @@ class ChartPainter extends BaseChartPainter {
   static get maxScrollX => BaseChartPainter.maxScrollX;
   late BaseChartRenderer mMainRenderer;
   BaseChartRenderer? mVolRenderer, mSecondaryRenderer;
-  StreamSink<InfoWindowEntity?>? sink;
+  StreamSink<DetailWindow?>? sink;
   Color? upColor, dnColor;
   Color? ma5Color, ma10Color, ma30Color;
   Color? volColor;
@@ -199,9 +199,9 @@ class ChartPainter extends BaseChartPainter {
     canvas.translate(mTranslateX * scaleX, 0.0);
     canvas.scale(scaleX, 1.0);
     for (int i = mStartIndex; datas != null && i <= mStopIndex; i++) {
-      KLineEntity? curPoint = datas?[i];
+      KLineUnit? curPoint = datas?[i];
       if (curPoint == null) continue;
-      KLineEntity lastPoint = i == 0 ? curPoint : datas![i - 1];
+      KLineUnit lastPoint = i == 0 ? curPoint : datas![i - 1];
       double curX = getX(i);
       double lastX = i == 0 ? curX : getX(i - 1);
 
@@ -270,7 +270,7 @@ class ChartPainter extends BaseChartPainter {
   @override
   void drawCrossLineText(Canvas canvas, Size size) {
     var index = calculateSelectedX(selectX);
-    KLineEntity point = getItem(index);
+    KLineUnit point = getItem(index);
 
     TextPainter tp = getTextPainter(point.close, chartColors.crossTextColor);
     double textHeight = tp.height;
@@ -334,11 +334,11 @@ class ChartPainter extends BaseChartPainter {
 
     dateTp.paint(canvas, Offset(x - textWidth / 2, y));
 
-    sink?.add(InfoWindowEntity(point, isLeft: isLeft));
+    sink?.add(DetailWindow(point, isLeft: isLeft));
   }
 
   @override
-  void drawText(Canvas canvas, KLineEntity data, double x) {
+  void drawText(Canvas canvas, KLineUnit data, double x) {
 
     if (isLongPress || (isTapShowInfoDialog && isOnTap)) {
       var index = calculateSelectedX(selectX);
@@ -498,7 +498,7 @@ class ChartPainter extends BaseChartPainter {
 
   void drawCrossLine(Canvas canvas, Size size) {
     var index = calculateSelectedX(selectX);
-    KLineEntity point = getItem(index);
+    KLineUnit point = getItem(index);
     Paint paintY = Paint()
       ..color = this.chartColors.vCrossColor
       ..strokeWidth = this.chartStyle.vCrossWidth

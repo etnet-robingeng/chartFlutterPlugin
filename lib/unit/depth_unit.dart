@@ -1,8 +1,8 @@
-class DepthEntity {
+class DepthUnit {
   double price;
   double vol;
 
-  DepthEntity(this.price, this.vol);
+  DepthUnit(this.price, this.vol);
 
   @override
   String toString() {

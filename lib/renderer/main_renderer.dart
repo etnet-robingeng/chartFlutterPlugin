@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../entity/candle_entity.dart';
+import '../unit/candle_unit.dart';
 import '../k_chart_widget.dart' show MainState;
 import 'base_chart_renderer.dart';
 
@@ -10,15 +10,15 @@ double? trendLineMax;
 double? trendLineScale;
 double? trendLineContentRec;
 
-class MainRenderer extends BaseChartRenderer<CandleEntity> {
-  late double mCandleWidth;
-  late double mCandleLineWidth;
+class MainRenderer extends BaseChartRenderer<CandleUnit> {
+  late double candleWidth;
+  late double candleLineWidth;
   MainState state;
   bool isLine;
 
   late Rect _contentRect;
   double _contentPadding = 5.0;
-  List<int> maDayList;
+  List<int> mDayList;
   final ChartStyle chartStyle;
   final ChartColors chartColors;
   final double mLineStrokeWidth = 1.0;
@@ -38,7 +38,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       this.chartColors,
       this.scaleX,
       this.verticalTextAlignment,
-      [this.maDayList = const [5, 10, 20]])
+      [this.mDayList = const [5, 10, 20]])
       : super(
       chartRect: mainRect,
       maxValue: maxValue,
@@ -46,8 +46,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       topPadding: topPadding,
       fixedLength: fixedLength,
       gridColor: chartColors.gridColor) {
-    mCandleWidth = this.chartStyle.candleWidth;
-    mCandleLineWidth = this.chartStyle.candleLineWidth;
+    candleWidth = this.chartStyle.candleWidth;
+    candleLineWidth = this.chartStyle.candleLineWidth;
     mLinePaint = Paint()
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
@@ -66,7 +66,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   }
 
   @override
-  void drawText(Canvas canvas, CandleEntity data, double x) {
+  void drawText(Canvas canvas, CandleUnit data, double x) {
     if (isLine == true) return;
     TextSpan? span;
     if (state == MainState.MA) {
@@ -97,12 +97,12 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     tp.paint(canvas, Offset(x, chartRect.top - topPadding));
   }
 
-  List<InlineSpan> _createMATextSpan(CandleEntity data) {
+  List<InlineSpan> _createMATextSpan(CandleUnit data) {
     List<InlineSpan> result = [];
     for (int i = 0; i < (data.maValueList?.length ?? 0); i++) {
       if (data.maValueList?[i] != 0) {
         var item = TextSpan(
-            text: "MA${maDayList[i]}:${format(data.maValueList![i])}    ",
+            text: "MA${mDayList[i]}:${format(data.maValueList![i])}    ",
             style: getTextStyle(this.chartColors.getMAColor(i)));
         result.add(item);
       }
@@ -111,7 +111,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   }
 
   @override
-  void drawChart(CandleEntity lastPoint, CandleEntity curPoint, double lastX,
+  void drawChart(CandleUnit lastPoint, CandleUnit curPoint, double lastX,
       double curX, Size size, Canvas canvas) {
     if (isLine != true) {
       drawCandle(curPoint, canvas, curX);
@@ -174,7 +174,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     mLinePath!.reset();
   }
 
-  void drawMaLine(CandleEntity lastPoint, CandleEntity curPoint, Canvas canvas,
+  void drawMaLine(CandleUnit lastPoint, CandleUnit curPoint, Canvas canvas,
       double lastX, double curX) {
     for (int i = 0; i < (curPoint.maValueList?.length ?? 0); i++) {
       if (i == 3) {
@@ -187,7 +187,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     }
   }
 
-  void drawBollLine(CandleEntity lastPoint, CandleEntity curPoint,
+  void drawBollLine(CandleUnit lastPoint, CandleUnit curPoint,
       Canvas canvas, double lastX, double curX) {
     if (lastPoint.up != 0) {
       drawLine(lastPoint.up, curPoint.up, canvas, lastX, curX,
@@ -203,16 +203,16 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     }
   }
 
-  void drawCandle(CandleEntity curPoint, Canvas canvas, double curX) {
+  void drawCandle(CandleUnit curPoint, Canvas canvas, double curX) {
     var high = getY(curPoint.high);
     var low = getY(curPoint.low);
     var open = getY(curPoint.open);
     var close = getY(curPoint.close);
-    double r = mCandleWidth / 2;
-    double lineR = mCandleLineWidth / 2;
+    double r = candleWidth / 2;
+    double lineR = candleLineWidth / 2;
     if (open >= close) {
-      if (open - close < mCandleLineWidth) {
-        open = close + mCandleLineWidth;
+      if (open - close < candleLineWidth) {
+        open = close + candleLineWidth;
       }
       chartPaint.color = this.chartColors.upColor;
       canvas.drawRect(
@@ -220,8 +220,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       canvas.drawRect(
           Rect.fromLTRB(curX - lineR, high, curX + lineR, low), chartPaint);
     } else if (close > open) {
-      if (close - open < mCandleLineWidth) {
-        open = close - mCandleLineWidth;
+      if (close - open < candleLineWidth) {
+        open = close - candleLineWidth;
       }
       chartPaint.color = this.chartColors.dnColor;
       canvas.drawRect(

@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'chart_style.dart';
-import 'entity/depth_entity.dart';
+import 'unit/depth_unit.dart';
 
 
 class DepthChart extends StatefulWidget {
-  final List<DepthEntity> bids, asks;
+  final List<DepthUnit> bids, asks;
   final int fixedLength;
   final Color? buyPathColor;
   final Color? sellPathColor;
@@ -66,7 +66,7 @@ class _DepthChartState extends State<DepthChart> {
 }
 
 class DepthChartPainter extends CustomPainter {
-  List<DepthEntity>? mBuyData, mSellData;
+  List<DepthUnit>? mBuyData, mSellData;
   Offset? pressOffset;
   bool isLongPress;
   int? fixedLength;
@@ -311,7 +311,7 @@ class DepthChartPainter extends CustomPainter {
   }
 
   void drawSelectView(Canvas canvas, int index, bool isLeft) {
-    DepthEntity entity = isLeft ? mBuyData![index] : mSellData![index];
+    DepthUnit entity = isLeft ? mBuyData![index] : mSellData![index];
     double dx = isLeft ? getBuyX(index) : getSellX(index);
 
     double radius = 8.0;

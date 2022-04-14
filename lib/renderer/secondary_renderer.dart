@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../entity/macd_entity.dart';
+import '../unit/macd_unit.dart';
 import '../k_chart_widget.dart' show SecondaryState;
 import 'base_chart_renderer.dart';
 
-class SecondaryRenderer extends BaseChartRenderer<MACDEntity> {
+class SecondaryRenderer extends BaseChartRenderer<MACDUnit> {
   late double mMACDWidth;
   SecondaryState state;
   final ChartStyle chartStyle;
@@ -32,7 +32,7 @@ class SecondaryRenderer extends BaseChartRenderer<MACDEntity> {
   }
 
   @override
-  void drawChart(MACDEntity lastPoint, MACDEntity curPoint, double lastX,
+  void drawChart(MACDUnit lastPoint, MACDUnit curPoint, double lastX,
       double curX, Size size, Canvas canvas) {
     switch (state) {
       case SecondaryState.MACD:
@@ -63,8 +63,8 @@ class SecondaryRenderer extends BaseChartRenderer<MACDEntity> {
     }
   }
 
-  void drawMACD(MACDEntity curPoint, Canvas canvas, double curX,
-      MACDEntity lastPoint, double lastX) {
+  void drawMACD(MACDUnit curPoint, Canvas canvas, double curX,
+      MACDUnit lastPoint, double lastX) {
     final macd = curPoint.macd ?? 0;
     double macdY = getY(macd);
     double r = mMACDWidth / 2;
@@ -87,7 +87,7 @@ class SecondaryRenderer extends BaseChartRenderer<MACDEntity> {
   }
 
   @override
-  void drawText(Canvas canvas, MACDEntity data, double x) {
+  void drawText(Canvas canvas, MACDUnit data, double x) {
     List<TextSpan>? children;
     switch (state) {
       case SecondaryState.MACD:
