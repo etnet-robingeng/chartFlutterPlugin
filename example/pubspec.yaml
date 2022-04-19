@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.2
-  http: ^0.13.3
+  cupertino_icons: ^1.0.4
+  http: ^0.13.4
   k_chart:
     path: ../
 

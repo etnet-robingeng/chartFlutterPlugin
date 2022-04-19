@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:k_chart/enum/enums.dart';
 
 import '../unit/macd_unit.dart';
-import '../chartPageWidget.dart' show SecondaryState;
 import 'base_chart_renderer.dart';
 
 class SecondaryRenderer extends BaseChartRenderer<MACDUnit> {

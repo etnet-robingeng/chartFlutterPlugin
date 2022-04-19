@@ -4,7 +4,7 @@ class ChartTranslations {
   final String high;
   final String low;
   final String close;
-  final String changeAmount;
+  final String changeValue;
   final String change;
   final String amount;
 
@@ -14,7 +14,7 @@ class ChartTranslations {
     this.high = 'High',
     this.low = 'Low',
     this.close = 'Close',
-    this.changeAmount = 'Change',
+    this.changeValue = 'Change',
     this.change = 'Change%',
     this.amount = 'Amount',
   });
@@ -32,7 +32,7 @@ class ChartTranslations {
       case 4:
         return close;
       case 5:
-        return changeAmount;
+        return changeValue;
       case 6:
         return change;
       case 7:
@@ -50,7 +50,7 @@ const kChartTranslations = {
     high: '高',
     low: '低',
     close: '收',
-    changeAmount: '漲跌額',
+    changeValue: '漲跌額',
     change: '漲跌幅',
     amount: '成交額',
   ),

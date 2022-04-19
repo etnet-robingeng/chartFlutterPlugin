@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../enum/enums.dart';
 import '../unit/candle_unit.dart';
 import '../chartPageWidget.dart' show MainState;
 import 'base_chart_renderer.dart';

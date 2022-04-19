@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:k_chart/chart_style.dart';
 import 'package:k_chart/chart_translations.dart';
+import 'package:k_chart/enum/enums.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:k_chart/chartPageWidget.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.purple,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -34,9 +35,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<KLineUnit>? datas;
-  bool showLoading = true;
-  MainState _mainState = MainState.MA;
-  bool _volHidden = false;
   SecondaryState _secondaryState = SecondaryState.MACD;
   bool isLine = true;
   bool isChinese = true;
@@ -45,6 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
   List<DepthUnit>? _bids, _asks;
   bool isChangeUI = false;
   bool _isTrendLine = false;
+  bool showLoading = true;
+  MainState _mainState = MainState.MA;
+  bool _volHidden = false;
 
   ChartStyle chartStyle = ChartStyle();
   ChartColors chartColors = ChartColors();

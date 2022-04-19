@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart'
     show Color, TextStyle, Rect, Canvas, Size, CustomPainter;
+import 'package:k_chart/enum/enums.dart';
 
 import '../chart_style.dart' show ChartStyle;
 import '../unit/k_line_unit.dart';

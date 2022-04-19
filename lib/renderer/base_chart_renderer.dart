@@ -33,7 +33,6 @@ abstract class BaseChartRenderer<T> {
     }
     scaleY = chartRect.height / (maxValue - minValue);
     gridPaint.color = gridColor;
-    // print("maxValue=====" + maxValue.toString() + "====minValue===" + minValue.toString() + "==scaleY==" + scaleY.toString());
   }
 
   double getY(double y) => (maxValue - y) * scaleY + chartRect.top;
@@ -60,10 +59,10 @@ abstract class BaseChartRenderer<T> {
     if (lastPrice == null || curPrice == null) {
       return;
     }
-    //("lasePrice==" + lastPrice.toString() + "==curPrice==" + curPrice.toString());
+
     double lastY = getY(lastPrice);
     double curY = getY(curPrice);
-    //print("lastX-----==" + lastX.toString() + "==lastY==" + lastY.toString() + "==curX==" + curX.toString() + "==curY==" + curY.toString());
+
     canvas.drawLine(
         Offset(lastX, lastY), Offset(curX, curY), chartPaint..color = color);
   }

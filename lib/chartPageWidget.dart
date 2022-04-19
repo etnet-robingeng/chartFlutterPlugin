@@ -7,11 +7,9 @@ import 'package:k_chart/renderer/main_renderer.dart';
 import 'package:k_chart/utils/date_format_util.dart';
 import 'chart_style.dart';
 import 'chart_translations.dart';
+import 'enum/enums.dart';
 import 'unit/detail_window.dart';
 import 'unit/k_line_unit.dart';
-
-enum MainState { MA, BOLL, NONE }
-enum SecondaryState { MACD, KDJ, RSI, WR, CCI, NONE }
 
 class TimeFormat {
   static const List<String> YEAR_MONTH_DAY = [yyyy, '-', mm, '-', dd];
