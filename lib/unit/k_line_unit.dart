@@ -28,8 +28,8 @@ class KLineUnit extends KUnit {
     high = json['high']?.toDouble() ?? 0;
     low = json['low']?.toDouble() ?? 0;
     close = json['close']?.toDouble() ?? 0;
-    vol = json['volume']?.toDouble() ?? 0;
-    amount = json['volume']?.toDouble();
+    vol = json['vol']?.toDouble() ?? 0;
+    amount = json['vol']?.toDouble();
     time = json['timestamp']?.toInt();
     // ratio = json['ratio']?.toDouble();
     // perChange = json['perChange']?.toDouble();
