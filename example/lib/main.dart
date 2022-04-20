@@ -76,16 +76,16 @@ class _MyHomePageState extends State<MyHomePage> {
     double amount = 0.0;
     bids.sort((left, right) => left.price.compareTo(right.price));
     bids.reversed.forEach((item) {
-      amount += item.vol;
-      item.vol = amount;
+      amount += item.volume;
+      item.volume = amount;
       _bids!.insert(0, item);
     });
 
     amount = 0.0;
     asks.sort((left, right) => left.price.compareTo(right.price));
     asks.forEach((item) {
-      amount += item.vol;
-      item.vol = amount;
+      amount += item.volume;
+      item.volume = amount;
       _asks!.add(item);
     });
     setState(() {});
@@ -212,8 +212,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getData(String period) {
-    final Future<String> future = getChatDataFromInternet(period);
-    // final Future<String> future = getChatDataFromJson();
+    // final Future<String> future = getChatDataFromInternet(period);
+    final Future<String> future = getChatDataFromJson();
     future.then((String result) {
       solveChatData(result);
     }).catchError((_) {

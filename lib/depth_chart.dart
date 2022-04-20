@@ -130,8 +130,8 @@ class DepthChartPainter extends CustomPainter {
         mBuyData!.isEmpty ||
         mSellData == null ||
         mSellData!.isEmpty) return;
-    mMaxVolume = mBuyData![0].vol;
-    mMaxVolume = max(mMaxVolume!, mSellData!.last.vol);
+    mMaxVolume = mBuyData![0].volume;
+    mMaxVolume = max(mMaxVolume!, mSellData!.last.volume);
     mMaxVolume = mMaxVolume! * 1.05;
     mMultiple = mMaxVolume! / mLineCount;
     fixedLength ??= 2;
@@ -174,19 +174,19 @@ class DepthChartPainter extends CustomPainter {
     double y;
     for (int i = 0; i < mBuyData!.length; i++) {
       if (i == 0) {
-        mBuyPath!.moveTo(0, getY(mBuyData![0].vol));
+        mBuyPath!.moveTo(0, getY(mBuyData![0].volume));
       }
       x = mBuyPointWidth! * i;
-      y = getY(mBuyData![i].vol);
+      y = getY(mBuyData![i].volume);
       if (i >= 1) {
         canvas.drawLine(
-            Offset(mBuyPointWidth! * (i - 1), getY(mBuyData![i - 1].vol)),
+            Offset(mBuyPointWidth! * (i - 1), getY(mBuyData![i - 1].volume)),
             Offset(x, y),
             mBuyLinePaint!);
       }
       if (i != mBuyData!.length - 1) {
         mBuyPath!.quadraticBezierTo(
-            x, y, mBuyPointWidth! * (i + 1), getY(mBuyData![i + 1].vol));
+            x, y, mBuyPointWidth! * (i + 1), getY(mBuyData![i + 1].volume));
       } else {
         if (i == 0) {
           mBuyPath!.lineTo(mDrawWidth, y);
@@ -210,14 +210,14 @@ class DepthChartPainter extends CustomPainter {
     double y;
     for (int i = 0; i < mSellData!.length; i++) {
       if (i == 0) {
-        mSellPath!.moveTo(mDrawWidth, getY(mSellData![0].vol));
+        mSellPath!.moveTo(mDrawWidth, getY(mSellData![0].volume));
       }
       x = (mSellPointWidth! * i) + mDrawWidth;
-      y = getY(mSellData![i].vol);
+      y = getY(mSellData![i].volume);
       if (i >= 1) {
         canvas.drawLine(
             Offset((mSellPointWidth! * (i - 1)) + mDrawWidth,
-                getY(mSellData![i - 1].vol)),
+                getY(mSellData![i - 1].volume)),
             Offset(x, y),
             mSellLinePaint!);
       }
@@ -226,7 +226,7 @@ class DepthChartPainter extends CustomPainter {
             x,
             y,
             (mSellPointWidth! * (i + 1)) + mDrawWidth,
-            getY(mSellData![i + 1].vol));
+            getY(mSellData![i + 1].volume));
       } else {
         if (i == 0) {
           mSellPath!.lineTo(mWidth, y);
@@ -316,14 +316,14 @@ class DepthChartPainter extends CustomPainter {
 
     double radius = 8.0;
     if (dx < mDrawWidth) {
-      canvas.drawCircle(Offset(dx, getY(entity.vol)), radius / 3,
+      canvas.drawCircle(Offset(dx, getY(entity.volume)), radius / 3,
           mBuyLinePaint!..style = PaintingStyle.fill);
-      canvas.drawCircle(Offset(dx, getY(entity.vol)), radius,
+      canvas.drawCircle(Offset(dx, getY(entity.volume)), radius,
           mBuyLinePaint!..style = PaintingStyle.stroke);
     } else {
-      canvas.drawCircle(Offset(dx, getY(entity.vol)), radius / 3,
+      canvas.drawCircle(Offset(dx, getY(entity.volume)), radius / 3,
           mSellLinePaint!..style = PaintingStyle.fill);
-      canvas.drawCircle(Offset(dx, getY(entity.vol)), radius,
+      canvas.drawCircle(Offset(dx, getY(entity.volume)), radius,
           mSellLinePaint!..style = PaintingStyle.stroke);
     }
 
@@ -348,9 +348,9 @@ class DepthChartPainter extends CustomPainter {
             bottomRect.top + (bottomRect.height - priceTP.height) / 2));
 
     TextPainter amountTP =
-    getTextPainter(entity.vol.toStringAsFixed(fixedLength!));
+    getTextPainter(entity.volume.toStringAsFixed(fixedLength!));
     amountTP.layout();
-    double y = getY(entity.vol);
+    double y = getY(entity.volume);
     double rightRectTop;
     if (y <= amountTP.height / 2) {
       rightRectTop = 0;

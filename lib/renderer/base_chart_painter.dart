@@ -239,9 +239,9 @@ abstract class BaseChartPainter extends CustomPainter {
 
   void getVolMaxMinValue(KLineUnit item) {
     mVolMaxValue = max(mVolMaxValue,
-        max(item.vol, max(item.MA5_Volume ?? 0, item.MA10_Volume ?? 0)));
+        max(item.volume, max(item.MA5_Volume ?? 0, item.MA10_Volume ?? 0)));
     mVolMinValue = min(mVolMinValue,
-        min(item.vol, min(item.MA5_Volume ?? 0, item.MA10_Volume ?? 0)));
+        min(item.volume, min(item.MA5_Volume ?? 0, item.MA10_Volume ?? 0)));
   }
 
   void getSecondaryMaxMinValue(KLineUnit item) {

@@ -1,11 +1,11 @@
 class DepthUnit {
   double price;
-  double vol;
+  double volume;
 
-  DepthUnit(this.price, this.vol);
+  DepthUnit(this.price, this.volume);
 
   @override
   String toString() {
-    return 'Data{price: $price, vol: $vol}';
+    return 'Data{price: $price, vol: $volume}';
   }
 }

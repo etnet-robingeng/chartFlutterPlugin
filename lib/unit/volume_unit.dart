@@ -2,7 +2,7 @@
 mixin VolumeEntity {
   late double open;
   late double close;
-  late double vol;
+  late double volume;
   double? MA5_Volume;
   double? MA10_Volume;
 }
