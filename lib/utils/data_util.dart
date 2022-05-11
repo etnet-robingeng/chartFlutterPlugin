@@ -160,7 +160,7 @@ class DataUtil {
   static void calcKDJ(List<KLineUnit> dataList) {
     var preK = 50.0;
     var preD = 50.0;
-    final tmp = dataList.first;
+    final tmp = dataList!.first;
     tmp.k = preK;
     tmp.d = preD;
     tmp.j = 50.0;
