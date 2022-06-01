@@ -55,31 +55,33 @@ class KChartWidget extends StatefulWidget {
   final VerticalTextAlignment verticalTextAlignment;
   final bool isTrendLine;
   final ThemeMode nowThemeMode;
+  final Size? size;
 
   KChartWidget(this.datas, this.chartStyle, this.chartColors,
       {required this.isTrendLine,
-        this.mainState = MainState.MA,
-        this.secondaryState = SecondaryState.MACD,
-        this.onSecondaryTap,
-        this.volHidden = false,
-        this.isLine = false,
-        this.isTapShowInfoDialog = false,
-        this.hideGrid = false,
-        this.isChinese = false,
-        this.showNowPrice = true,
-        this.showInfoDialog = true,
-        this.materialInfoDialog = true,
-        this.translations = kChartTranslations,
-        this.timeFormat = TimeFormat.YEAR_MONTH_DAY,
-        this.onLoadMore,
-        this.fixedLength = 2,
-        this.maDayList = const [5, 10, 20],
-        this.flingTime = 600,
-        this.flingRatio = 0.5,
-        this.flingCurve = Curves.decelerate,
-        this.isOnDrag,
-        this.verticalTextAlignment = VerticalTextAlignment.left,
-        this.nowThemeMode = ThemeMode.dark});
+      this.mainState = MainState.MA,
+      this.secondaryState = SecondaryState.MACD,
+      this.onSecondaryTap,
+      this.volHidden = false,
+      this.isLine = false,
+      this.isTapShowInfoDialog = false,
+      this.hideGrid = false,
+      this.isChinese = false,
+      this.showNowPrice = true,
+      this.showInfoDialog = true,
+      this.materialInfoDialog = true,
+      this.translations = kChartTranslations,
+      this.timeFormat = TimeFormat.YEAR_MONTH_DAY,
+      this.onLoadMore,
+      this.fixedLength = 2,
+      this.maDayList = const [5, 10, 20],
+      this.flingTime = 600,
+      this.flingRatio = 0.5,
+      this.flingCurve = Curves.decelerate,
+      this.isOnDrag,
+      this.verticalTextAlignment = VerticalTextAlignment.left,
+      this.nowThemeMode = ThemeMode.dark,
+      this.size = const Size(double.infinity, double.infinity)});
 
   @override
   _KChartWidgetState createState() => _KChartWidgetState();
@@ -132,9 +134,7 @@ class _KChartWidgetState extends State<KChartWidget>
       mScrollX = mSelectX = 0.0;
       mScaleX = 1.0;
     }
-    final _painter = ChartPainter(
-        widget.chartStyle,
-        widget.chartColors,
+    final _painter = ChartPainter(widget.chartStyle, widget.chartColors,
         lines: lines,
         //For TrendLine
         isTrendLine: widget.isTrendLine,
@@ -158,8 +158,7 @@ class _KChartWidgetState extends State<KChartWidget>
         fixedLength: widget.fixedLength,
         maDayList: widget.maDayList,
         verticalTextAlignment: widget.verticalTextAlignment,
-        nowThemeMode: widget.nowThemeMode
-    );
+        nowThemeMode: widget.nowThemeMode);
     return LayoutBuilder(
       builder: (context, constraints) {
         mHeight = constraints.maxHeight;
@@ -233,7 +232,7 @@ class _KChartWidgetState extends State<KChartWidget>
             isOnTap = false;
             isLongPress = true;
             if ((mSelectX != details.globalPosition.dx ||
-                mSelectY != details.globalPosition.dy) &&
+                    mSelectY != details.globalPosition.dy) &&
                 !widget.isTrendLine) {
               mSelectX = details.globalPosition.dx;
               notifyChanged();
@@ -253,7 +252,7 @@ class _KChartWidgetState extends State<KChartWidget>
           },
           onLongPressMoveUpdate: (details) {
             if ((mSelectX != details.globalPosition.dx ||
-                mSelectY != details.globalPosition.dy) &&
+                    mSelectY != details.globalPosition.dy) &&
                 !widget.isTrendLine) {
               mSelectX = details.globalPosition.dx;
               mSelectY = details.localPosition.dy;
@@ -278,7 +277,7 @@ class _KChartWidgetState extends State<KChartWidget>
           child: Stack(
             children: <Widget>[
               CustomPaint(
-                size: Size(double.infinity, double.infinity),
+                size: Size(widget.size!.width, widget.size!.height),
                 painter: _painter,
               ),
               if (widget.showInfoDialog) _buildInfoDialog()
@@ -312,7 +311,7 @@ class _KChartWidgetState extends State<KChartWidget>
     aniX = null;
     aniX = Tween<double>(begin: mScrollX, end: x * widget.flingRatio + mScrollX)
         .animate(CurvedAnimation(
-        parent: _controller!.view, curve: widget.flingCurve));
+            parent: _controller!.view, curve: widget.flingCurve));
     aniX!.addListener(() {
       mScrollX = aniX!.value;
       if (mScrollX <= 0) {
