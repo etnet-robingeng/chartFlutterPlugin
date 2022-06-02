@@ -160,35 +160,37 @@ class DataUtil {
   static void calcKDJ(List<KLineUnit> dataList) {
     var preK = 50.0;
     var preD = 50.0;
-    final tmp = dataList.first;
-    tmp.k = preK;
-    tmp.d = preD;
-    tmp.j = 50.0;
-    for (int i = 1; i < dataList.length; i++) {
-      final entity = dataList[i];
-      final n = max(0, i - 8);
-      var low = entity.low;
-      var high = entity.high;
-      for (int j = n; j < i; j++) {
-        final t = dataList[j];
-        if (t.low < low) {
-          low = t.low;
+    if (dataList != null && dataList.isNotEmpty){
+      final tmp = dataList.first;
+      tmp.k = preK;
+      tmp.d = preD;
+      tmp.j = 50.0;
+      for (int i = 1; i < dataList.length; i++) {
+        final entity = dataList[i];
+        final n = max(0, i - 8);
+        var low = entity.low;
+        var high = entity.high;
+        for (int j = n; j < i; j++) {
+          final t = dataList[j];
+          if (t.low < low) {
+            low = t.low;
+          }
+          if (t.high > high) {
+            high = t.high;
+          }
         }
-        if (t.high > high) {
-          high = t.high;
-        }
+        final cur = entity.close;
+        var rsv = (cur - low) * 100.0 / (high - low);
+        rsv = rsv.isNaN ? 0 : rsv;
+        final k = (2 * preK + rsv) / 3.0;
+        final d = (2 * preD + k) / 3.0;
+        final j = 3 * k - 2 * d;
+        preK = k;
+        preD = d;
+        entity.k = k;
+        entity.d = d;
+        entity.j = j;
       }
-      final cur = entity.close;
-      var rsv = (cur - low) * 100.0 / (high - low);
-      rsv = rsv.isNaN ? 0 : rsv;
-      final k = (2 * preK + rsv) / 3.0;
-      final d = (2 * preD + k) / 3.0;
-      final j = 3 * k - 2 * d;
-      preK = k;
-      preD = d;
-      entity.k = k;
-      entity.d = d;
-      entity.j = j;
     }
   }
 
